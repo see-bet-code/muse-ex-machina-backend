@@ -6,7 +6,7 @@ class CreateProducts < ActiveRecord::Migration[6.0]
       t.string :title
       t.string :image
       t.string :merchant_name
-      t.textarea :description
+      t.text :description
 
       t.timestamps
     end
