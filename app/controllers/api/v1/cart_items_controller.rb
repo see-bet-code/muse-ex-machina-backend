@@ -1,15 +1,12 @@
 class Api::V1::CartItemsController < ApplicationController
   skip_before_action :authorized
 
-  def index
-    render json: {cart_items: CartItem.where().to_json(:include => [:product])}
-  end
-
   def create
     p cart_item_params
     @cart_item = CartItem.new(cart_item_params)
+    cart_id = cart_item_params[:cart_id]
     if @cart_item.save
-      render json: { cart_items: CartItem.all.to_json(:include => [:product])}, status: :created
+      render json: { cart_items: CartItem.where(cart_id: cart_id).to_json(:include => [:product])}, status: :created
     else
       render json: { errors: 'failed to create cart item' }, status: :not_acceptable
     end
@@ -17,16 +14,19 @@ class Api::V1::CartItemsController < ApplicationController
 
   def update
     @cart_item = CartItem.find(params[:id])
+    cart_id = cart_item_params[:cart_id]
     if @cart_item.update(cart_item_params)
-      render json: { cart_items: CartItem.all.to_json(:include => [:product])}, status: :created
+      render json: { cart_items: CartItem.where(cart_id: cart_id).to_json(:include => [:product])}, status: :created
     else
       render json: { errors: 'failed to update cart item' }, status: :not_acceptable
     end
   end
 
   def destroy
+    @cart_item = CartItem.find(params[:id])
+    cart_id = @cart_item[:cart_id]
     CartItem.destroy(params[:id])
-    render json: { cart_items: CartItem.all.to_json(:include => [:product])}
+    render json: { cart_items: CartItem.where(cart_id: cart_id).to_json(:include => [:product])}
   end
 
   private
