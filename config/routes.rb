@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get '/profile', to: 'users#profile'
       resources :carts
       resources :cart_items
+      resources :products
 
       post '/create_session', to: 'checkouts#create_session'
     end
