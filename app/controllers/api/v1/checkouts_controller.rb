@@ -1,6 +1,5 @@
 require 'stripe'
 # require 'json'
-# require 'sinatra'
 
 class Api::V1::CheckoutsController < ApplicationController
   # This example sets up an endpoint using the Sinatra framework.
@@ -33,9 +32,19 @@ class Api::V1::CheckoutsController < ApplicationController
       success_url: 'http://localhost:3001/profile-page',
       cancel_url: 'http://localhost:3001/cart',
     })
-    Cart.find(params["_json"][0]["cart_id"]).update(checked_out: true)
-    render json: { id: session.id, session: session }
 
+    @intent = Stripe::PaymentIntent.retrieve(
+                session["payment_intent"],
+              )
+
+    # Cart.find(params["_json"][0]["cart_id"]).update(checked_out: true)
+    render json: { id: session.id, session: session, secret: @intent.client_secret }
+
+  end
+
+  def client_secret
+    p @intent.client_secret
+    render json: {client_secret: @intent.client_secret} if @intent
   end
 
 

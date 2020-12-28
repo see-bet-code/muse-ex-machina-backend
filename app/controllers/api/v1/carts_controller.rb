@@ -6,31 +6,32 @@ class Api::V1::CartsController < ApplicationController
   end
 
   def index
-    active = Cart.find_by(checked_out: false)
+    active = Cart.find_by(checked_out: false, user_id: current_user.id)
     if active
-      render json: { carts: Cart.all.where(user_id: current_user.id), active: active }
+      render json: { carts: Cart.where(user_id: current_user.id), active: active }
     else
       new = Cart.create(user_id: current_user.id)
-      render json: { carts: Cart.all.where(user_id: current_user.id), active: new }
+      render json: { carts: Cart.where(user_id: current_user.id), active: new }
     end
   end
 
   def create
     @cart = Cart.new(user_id: current_user.id)
     if @cart.save
-      render json: { cart: @cart, carts: Cart.all.where(user_id: current_user.id) }, status: :created
+      render json: { cart: @cart, carts: Cart.where(user_id: current_user.id) }, status: :created
     else
       render json: { errors: 'failed to create cart' }, status: :not_acceptable
     end
   end
 
-  # def update
-  #   if @cart.update(cart_params)
-  #     render json: { cart: @cart }, status: :updated
-  #   else
-  #     render json: { errors: @cart.errors.full_messages }, status: :not_acceptable
-  #   end 
-  # end
+  def update
+    cart = Cart.find(params[:id])
+    if cart.update(update_params)
+      render json: { carts: Cart.where(user_id: current_user.id) }
+    else
+      render json: { errors: cart.errors.full_messages }, status: :not_acceptable
+    end 
+  end
 
 # def destroy
 #   if @cart
@@ -40,12 +41,12 @@ class Api::V1::CartsController < ApplicationController
 #   end
 # end
 
-#   private
-#   def cart_params
-#     params.permit(
-#       :user_id
-#       # t.boolean :checked_out, default: false
-#       ) 
-  # end
+  private
+
+  def update_params
+    params.require(:cart).permit(
+      :checked_out
+      ) 
+  end
 
 end

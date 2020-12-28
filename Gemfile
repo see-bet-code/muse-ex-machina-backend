@@ -50,3 +50,5 @@ gem 'figaro'
 
 gem 'stripe'
 # gem 'sinatra'
+
+gem "aws-sdk-s3", require: false

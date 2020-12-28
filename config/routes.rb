@@ -8,12 +8,12 @@ Rails.application.routes.draw do
       get '/auto_login', to: 'sessions#auto_login'
       get '/user_auth', to: "sessions#user_auth"
       delete '/logout', to: 'sessions#destroy'
-      get '/profile', to: 'users#profile'
       resources :carts
       resources :cart_items
       resources :products
 
       post '/create_session', to: 'checkouts#create_session'
+      get '/client_secret', to: 'checkouts#client_secret'
     end
   end
 end

@@ -1,3 +1,3 @@
 class ViewSerializer < ActiveModel::Serializer
-  attributes :user, :product
+  attributes :id, :user, :product
 end

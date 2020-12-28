@@ -5,7 +5,8 @@ class Api::V1::SessionsController < ApplicationController
     @user = User.find_by(username: user_login_params[:username])
     if @user && @user.authenticate(user_login_params[:password])
       token = encode_token(user_id: @user.id)
-      render json: { user: @user.to_json(:include => [:views, :carts]), jwt: token, message: "Welcome back, #{@user.name}"}, status: :accepted
+      avatar = rails_blob_path(@user.avatar)
+      render json: { user: UserSerializer.new(@user), jwt: token}, status: :accepted
     else
       render json: { message: 'Invalid username and/or password' }, status: :unauthorized
     end
@@ -18,7 +19,7 @@ class Api::V1::SessionsController < ApplicationController
 
   def auto_login
     if current_user
-      render json: current_user
+      render json: { user: UserSerializer.new(current_user) }
     else
       render json: {errors: "No user logged in"}
     end
