@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_many :carts
   has_many :views
   has_one_attached :avatar
-  validate :default_avatar, :on => :create
+  before_create :default_avatar
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }
   

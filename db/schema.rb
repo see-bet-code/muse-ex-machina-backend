@@ -58,12 +58,15 @@ ActiveRecord::Schema.define(version: 2020_12_22_171922) do
     t.float "price"
     t.string "category"
     t.string "title"
+    t.string "asin"
+    t.string "brand"
     t.string "image"
     t.string "merchant_name"
     t.text "description"
+    t.float "rating"
+    t.integer "ratings_total"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "asin"
   end
 
   create_table "users", force: :cascade do |t|

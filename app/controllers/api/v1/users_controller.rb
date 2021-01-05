@@ -2,7 +2,11 @@ class Api::V1::UsersController < ApplicationController
   skip_before_action :authorized, only: [:create]
 
   def create
-    @user = User.new(user_params)
+    if params[:avatar] == "undefined"
+      @user = User.new(user_params)
+    else
+      @user = User.new(user_params.merge(avatar: params[:avatar]))
+    end
     if @user.save
       token = encode_token(user_id: @user.id)
       render json: { user: UserSerializer.new(@user), serializer: UserSerializer, jwt: token}, status: :created
@@ -61,8 +65,7 @@ end
       :password,
       :email,
       :name,
-      :age,
-      :avatar)
+      :age)
   end
 
 
