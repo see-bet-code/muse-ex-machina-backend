@@ -9,7 +9,7 @@ class Api::V1::UsersController < ApplicationController
     end
     if @user.save
       token = encode_token(user_id: @user.id)
-      render json: { user: UserSerializer.new(@user), serializer: UserSerializer, jwt: token}, status: :created
+      render json: { user: UserSerializer.new(@user), jwt: token}, status: :created
     else
       render json: { errors: 'failed to create user' }, status: :not_acceptable
     end
@@ -65,7 +65,9 @@ end
       :password,
       :email,
       :name,
-      :age)
+      :age,
+      :clothing_size,
+      :shoe_size)
   end
 
 

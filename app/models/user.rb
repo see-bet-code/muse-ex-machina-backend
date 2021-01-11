@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-  has_many :carts
-  has_many :views
+  has_many :carts, dependent: :destroy
+  has_many :reviews, dependent: :destroy
   has_one_attached :avatar
   before_create :default_avatar
 

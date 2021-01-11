@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
       resources :products
 
+      resources :reviews
+
       post '/create_session', to: 'checkouts#create_session'
       get '/client_secret', to: 'checkouts#client_secret'
     end

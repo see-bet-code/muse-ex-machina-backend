@@ -27,7 +27,8 @@ class Api::V1::CartsController < ApplicationController
   def update
     cart = Cart.find(params[:id])
     if cart.update(update_params)
-      render json: { carts: Cart.where(user_id: current_user.id) }
+      cart.products.map { |p| Review.find_or_create_by(user_id: current_user.id, product_id: p.id) }
+      # render json: { carts: Cart.where(user_id: current_user.id) }
     else
       render json: { errors: cart.errors.full_messages }, status: :not_acceptable
     end 
